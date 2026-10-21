@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080e1d">
+  <title>Horizon — Build beyond the expected</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+    :root{--bg:#080e1d;--surface:#101a2d;--surface-2:#15213a;--text:#f5f4ef;--muted:#a8b7cc;--cyan:#72e6ed;--violet:#aa94ff;--line:rgba(185,210,238,.14)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{width:100%;margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.65}
+    button,input,select,textarea{font:inherit}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer}
+    :focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+    .container{width:min(1180px,calc(100% - 48px));margin:auto}
+    .site-header{position:sticky;top:0;z-index:20;background:rgba(8,14,29,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+    .header-inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{font-size:24px;font-weight:700;letter-spacing:-.06em;line-height:1}
+    .brand::after{content:".";color:var(--cyan)}
+    .nav{display:flex;align-items:center;gap:30px}
+    .nav a:not(.button){font-size:14px;color:var(--muted);transition:color .2s}
+    .nav a:hover,.footer-links a:hover{color:var(--cyan)}
+    .button{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 22px;border:1px solid var(--cyan);border-radius:7px;background:var(--cyan);color:#071321;font-size:14px;font-weight:700;line-height:1.3;transition:transform .2s,background .2s}
+    .button:hover{transform:translateY(-2px);background:#b0f8f7}
+    .button.secondary{background:transparent;color:var(--text);border-color:rgba(245,244,239,.4)}
+    .button.secondary:hover{background:rgba(255,255,255,.08)}
+    .menu-toggle{display:none;background:none;border:1px solid var(--line);color:var(--text);border-radius:7px;padding:9px 12px}
+    .hero{position:relative;overflow:hidden;min-height:calc(100 * min(var(--vh, 1vh), 1vh) - 76px);display:flex;align-items:center;isolation:isolate;background:radial-gradient(ellipse at 78% 56%,#28376a 0%,#121d38 34%,#080e1d 73%)}
+    .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(114,230,237,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(114,230,237,.07) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(90deg,transparent 20%,black 100%);transform:perspective(600px) rotateX(38deg) scale(1.5);transform-origin:bottom;z-index:-1}
+    .hero::after{content:"";position:absolute;width:660px;height:660px;right:-110px;top:16%;border-radius:50%;background:radial-gradient(circle at 50% 50%,#b4faff 0%,#72e6ed 2%,#7878db 8%,rgba(108,92,210,.24) 25%,transparent 65%);filter:blur(2px);opacity:.85;z-index:-1}
+    .hero-inner{padding:125px 0 140px}
+    .eyebrow{margin:0 0 20px;color:var(--cyan);font-size:12px;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+    h1,h2,h3,p{margin-top:0}
+    h1,h2,h3{line-height:1.12;letter-spacing:-.045em}
+    h1{max-width:800px;font-size:clamp(56px,8vw,112px);margin-bottom:27px}
+    h2{font-size:clamp(38px,5vw,66px);margin-bottom:25px}
+    h3{font-size:22px;margin-bottom:13px}
+    .hero-copy{max-width:620px;color:#d2dbe9;font-size:19px;line-height:1.7}
+    .actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:33px}
+    .hero-note{margin:105px 0 0;color:var(--muted);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+    section{scroll-margin-top:76px}
+    .section{padding:125px 0}
+    .section-intro{max-width:750px}
+    .lead{color:var(--muted);font-size:19px;line-height:1.8}
+    
+    .split{display:grid;grid-template-columns:0.85fr 1.15fr;align-items:center;gap:clamp(48px,6vw,80px)}
+    
+    .about{background:#0c1527}
+    .beliefs{display:grid;gap:14px;margin-top:35px}
+    .belief{padding:20px 24px;border-left:2px solid var(--cyan);background:rgba(255,255,255,.035)}
+    .belief strong{display:block;font-size:17px}
+    .belief span{display:block;color:var(--muted);font-size:14px;margin-top:3px}
+    
+    .visual-panel{position:relative;width:100%}
+    
+    .solutions{background:var(--bg)}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:55px}
+    .card{min-height:270px;padding:32px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(150deg,#152039,#10192b);transition:transform .25s,border-color .25s}
+    .card:hover{transform:translateY(-5px);border-color:rgba(114,230,237,.55)}
+    .card-symbol{display:block;width:38px;height:38px;margin-bottom:45px;border:2px solid var(--cyan);border-radius:10px;transform:rotate(-12deg)}
+    .card:nth-child(2n) .card-symbol{border-color:var(--violet);border-radius:50%}
+    .card:nth-child(3n) .card-symbol{border-radius:4px;transform:rotate(45deg)}
+    .card p{color:var(--muted);font-size:15px;margin:0}
+    .approach{background:#101a2d}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:60px}
+    .step{padding-top:22px;border-top:2px solid var(--line)}
+    .step:nth-child(1){border-color:#72e6ed}.step:nth-child(2){border-color:#87c8f2}.step:nth-child(3){border-color:#9baaff}.step:nth-child(4){border-color:#b597f2}
+    .step-number{display:block;color:var(--cyan);font-size:13px;font-weight:700;margin-bottom:36px}
+    .step p{color:var(--muted);font-size:15px}
+    .technology{background:#0b1324}
+    .tech-list{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:35px}
+    .tech-item{padding:19px 22px;border:1px solid var(--line);border-radius:7px;background:rgba(255,255,255,.025);font-weight:600}
+    .tech-item::before{content:"↗";color:var(--cyan);margin-right:15px}
+    .culture{background:#0d172b}
+    .manifesto{padding:45px;border:1px solid rgba(170,148,255,.3);border-radius:14px;background:linear-gradient(145deg,rgba(170,148,255,.12),rgba(114,230,237,.04))}
+    .manifesto p{font-size:clamp(24px,3vw,36px);font-weight:600;line-height:1.5;letter-spacing:-.035em;margin:0}
+    .manifesto p+p{margin-top:12px}
+    .manifesto p::before{content:"— ";color:var(--violet)}
+    .contact{background:radial-gradient(ellipse at 85% 10%,rgba(91,79,179,.2),transparent 48%),#080e1d}
+    .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(40px,8vw,110px)}
+    .form-panel{padding:36px;border:1px solid var(--line);border-radius:14px;background:rgba(21,33,58,.83)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    label{display:block;margin:0 0 7px;color:#dae5ef;font-size:13px;font-weight:600}
+    .field{margin-bottom:19px}
+    input,select,textarea{width:100%;padding:13px 14px;border:1px solid #43516b;border-radius:6px;background:#0c1527;color:var(--text);outline:none}
+    input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(114,230,237,.15)}
+    textarea{min-height:135px;resize:vertical}
+    .form-note{font-size:13px;color:var(--muted);margin:15px 0 0}
+    .form-status{margin:16px 0 0;color:var(--cyan);font-weight:600}
+    .form-status:empty{display:none}
+    .footer{border-top:1px solid var(--line);padding:60px 0 28px;background:#080e1d}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr;gap:50px}
+    .footer p{max-width:430px;color:var(--muted);font-size:14px;margin:19px 0 0}
+    .footer-links{display:flex;flex-wrap:wrap;gap:14px 22px;align-content:start}
+    .footer-links a{color:var(--muted);font-size:14px}
+    .footer-bottom{border-top:1px solid var(--line);margin-top:65px;padding-top:23px;color:var(--muted);font-size:13px}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .65s,transform .65s}
+    .reveal.visible{opacity:1;transform:none}
+    
+    @media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:repeat(2,1fr)}.split,.contact-grid{grid-template-columns:1fr}.hero::after{opacity:.4}}
+    @media(max-width:720px){.container{width:min(100% - 36px,1180px)}.header-inner{min-height:68px}.menu-toggle{display:block}.nav{display:none;position:absolute;top:68px;left:0;right:0;padding:22px 18px;background:#0d172b;border-bottom:1px solid var(--line);flex-direction:column;align-items:stretch;gap:18px}.nav.open{display:flex}.nav .button{align-self:flex-start}.hero{min-height:680px}.hero-inner{padding:100px 0 75px}.hero-note{margin-top:90px}.section{padding:85px 0}.cards,.tech-list{grid-template-columns:1fr 1fr}.card{min-height:245px}.footer-grid{grid-template-columns:1fr}}
+    @media(max-width:520px){h1{font-size:clamp(51px,12vw,70px)}.hero-copy,.lead{font-size:17px}.cards,.steps,.tech-list,.form-row{grid-template-columns:1fr}.card{min-height:220px}.card-symbol{margin-bottom:30px}.form-panel{padding:22px}.manifesto{padding:27px}.actions .button{width:100%}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
+  </style>
+</head>
+<body style="background: rgb(8, 14, 29);">
+  <header class="site-header">
+   <div class="container header-inner">
+     <a class="brand" href="#home" style="color: rgb(245, 244, 239);">Horizon</a> 
+     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" style="color: rgb(245, 244, 239);">Menu</button>
+    <nav id="primary-nav" class="nav" aria-label="Main navigation" style="color: rgb(168, 183, 204);">
+      <a href="#home">Home</a> 
+      <a href="#about">About</a> 
+      <a href="#solutions">Solutions</a> 
+      <a href="#approach">Approach</a> 
+      <a href="#contact">Contact</a> 
+      <a class="button" href="#contact" style="background: rgb(114, 230, 237); color: rgb(7, 19, 33);">Start a conversation</a>
+    </nav>
+   </div>
+  </header>
+  
+  <main>
+   <section id="home" class="hero" style="background: radial-gradient(at 78% 56%, rgb(40, 55, 106) 0%, rgb(18, 29, 56) 34%, rgb(8, 14, 29) 73%);">
+    <div class="container hero-inner">
+     <p class="eyebrow" style="color: rgb(114, 230, 237);">A different kind of engineering studio</p>
+     <h1 style="color: rgb(245, 244, 239); font-size: 64px; font-weight: 700;">Build beyond the expected.</h1>
+     <p class="hero-copy" style="color: rgb(210, 219, 233);">We turn ambitious ideas into useful software — from AI platforms and mobile apps to desktop dashboards and custom systems. Thoughtful technology starts here.</p>
+     <div class="actions">
+       <a class="button" href="#solutions" style="background: rgb(114, 230, 237); color: rgb(7, 19, 33);">Explore what we build</a> 
+       <a class="button secondary" href="#about" style="background: transparent; color: rgb(245, 244, 239);">Meet Horizon</a>
+     </div>
+     <p class="hero-note" style="color: rgb(168, 183, 204);">Curiosity in motion · Ideas made real</p>
+    </div>
+   </section>
+   
+   <section id="about" class="section about" style="background: rgb(12, 21, 39);">
+    <div class="container split">
+     <div class="reveal">
+      <p class="eyebrow" style="color: rgb(114, 230, 237);">Who we are</p>
+      <h2 style="color: rgb(245, 244, 239); font-size: 42px; font-weight: 700; line-height: 1.1; margin-bottom: 20px;">Young minds.<br>Serious technology.</h2>
+      <p class="lead" style="color: rgb(168, 183, 204);">Horizon is built by students and young IT enthusiasts who learn continuously, collaborate openly, and build with purpose. We bring fresh perspective to real technical challenges — and the discipline to keep improving what we make.</p>
+      <div class="beliefs">
+       <div class="belief">
+        <strong style="color: #fff;">Curiosity over ego</strong><span style="color: rgb(168, 183, 204);">Ask better questions. Share what we learn.</span>
+       </div>
+       <div class="belief">
+        <strong style="color: #fff;">Useful innovation over hype</strong><span style="color: rgb(168, 183, 204);">Choose ideas that make a difference in practice.</span>
+       </div>
+       <div class="belief">
+        <strong style="color: #fff;">Quality through iteration</strong><span style="color: rgb(168, 183, 204);">Build, test, listen, and make it better.</span>
+       </div>
+      </div>
+     </div>
+     
+     <div class="visual-panel reveal">
+       <img src="horizon-showcase.jpg" alt="Horizon AI Showcase - ComicMotion and TowLink" style="width: 100%; height: auto; border-radius: 18px; display: block; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid var(--line);" />
+     </div>
+     
+    </div>
+   </section>
+   
+   <section id="solutions" class="section solutions" style="background: rgb(8, 14, 29);">
+    <div class="container">
+     <div class="section-intro reveal">
+      <p class="eyebrow" style="color: rgb(114, 230, 237);">What we build</p>
+      <h2 style="font-size: 42px; font-weight: 700;">Software shaped around the problem.</h2>
+      <p class="lead" style="color: rgb(168, 183, 204);">Different challenges call for different tools. We design and develop experiences that feel clear, capable, and genuinely useful.</p>
+     </div>
+     <div class="cards">
+      <article class="card reveal" style="background: linear-gradient(150deg, rgb(21, 32, 57), rgb(16, 25, 43));">
+       <span class="card-symbol" aria-hidden="true"></span>
+       <h3 style="font-size: 22px;">AI platforms</h3>
+       <p>Practical intelligent workflows that turn complex information into better decisions.</p>
+      </article>
+      <article class="card reveal" style="background: linear-gradient(150deg, rgb(21, 32, 57), rgb(16, 25, 43));">
+       <span class="card-symbol" aria-hidden="true"></span>
+       <h3 style="font-size: 22px;">Mobile applications</h3>
+       <p>Intuitive tools designed for the moments and devices people use every day.</p>
+      </article>
+      <article class="card reveal" style="background: linear-gradient(150deg, rgb(21, 32, 57), rgb(16, 25, 43));">
+       <span class="card-symbol" aria-hidden="true"></span>
+       <h3 style="font-size: 22px;">Desktop dashboards</h3>
+       <p>Focused views that make data, operations, and next steps easier to understand.</p>
+      </article>
+      <article class="card reveal" style="background: linear-gradient(150deg, rgb(21, 32, 57), rgb(16, 25, 43));">
+       <span class="card-symbol" aria-hidden="true"></span>
+       <h3 style="font-size: 22px;">Desktop applications</h3>
+       <p>Purpose-built software for demanding workflows and productive workspaces.</p>
+      </article>
+      <article class="card reveal" style="background: linear-gradient(150deg, rgb(21, 32, 57), rgb(16, 25, 43));">
+       <span class="card-symbol" aria-hidden="true"></span>
+       <h3 style="font-size: 22px;">Web experiences</h3>
+       <p>Fast, accessible interfaces that make every interaction feel effortless.</p>
+      </article>
+      <article class="card reveal" style="background: linear-gradient(150deg, rgb(21, 32, 57), rgb(16, 25, 43));">
+       <span class="card-symbol" aria-hidden="true"></span>
+       <h3 style="font-size: 22px;">Tailored systems</h3>
+       <p>Connected software built around the way your idea actually needs to work.</p>
+      </article>
+     </div>
+    </div>
+   </section>
+   
+   <section id="approach" class="section approach" style="background: rgb(16, 26, 45);">
+    <div class="container">
+     <div class="section-intro reveal">
+      <p class="eyebrow" style="color: rgb(114, 230, 237);">Our approach</p>
+      <h2 style="font-size: 42px; font-weight: 700;">From first idea to working product.</h2>
+      <p class="lead" style="color: rgb(168, 183, 204);">Good software is a conversation between the problem, the people it serves, and the team building it. We keep that conversation going at every stage.</p>
+     </div>
+     <div class="steps">
+      <article class="step reveal">
+       <span class="step-number">01 / DISCOVER</span>
+       <h3 style="font-size: 20px;">Understand the problem</h3>
+       <p>Listen closely, challenge assumptions, and define what success should look like.</p>
+      </article>
+      <article class="step reveal">
+       <span class="step-number">02 / DESIGN</span>
+       <h3 style="font-size: 20px;">Shape the experience</h3>
+       <p>Map the journey and make the complicated feel clear and approachable.</p>
+      </article>
+      <article class="step reveal">
+       <span class="step-number">03 / BUILD</span>
+       <h3 style="font-size: 20px;">Engineer the product</h3>
+       <p>Create reliable foundations and turn considered designs into working software.</p>
+      </article>
+      <article class="step reveal">
+       <span class="step-number">04 / EVOLVE</span>
+       <h3 style="font-size: 20px;">Learn and improve</h3>
+       <p>Test with real feedback, refine the details, and keep moving forward.</p>
+      </article>
+     </div>
+    </div>
+   </section>
+   
+   <section id="technology" class="section technology" style="background: rgb(11, 19, 36);">
+    <div class="container split">
+     <div class="reveal">
+      <p class="eyebrow" style="color: rgb(114, 230, 237);">Technology with intention</p>
+      <h2 style="font-size: 42px; font-weight: 700;">Many languages. One standard: thoughtful engineering.</h2>
+      <p class="lead" style="color: rgb(168, 183, 204);">We work across multiple programming languages and choose tools for the product’s needs, not for the trend of the moment. The right solution is the one that serves people well and can grow with them.</p>
+     </div>
+     <div class="tech-list reveal">
+      <div class="tech-item">Front-end</div>
+      <div class="tech-item">Back-end</div>
+      <div class="tech-item">Mobile</div>
+      <div class="tech-item">Desktop</div>
+      <div class="tech-item">AI / data</div>
+      <div class="tech-item">Cloud &amp; automation</div>
+     </div>
+    </div>
+   </section>
+   
+   <section id="culture" class="section culture" style="background: rgb(13, 23, 43);">
+    <div class="container split">
+     <div class="reveal">
+      <p class="eyebrow" style="color: rgb(114, 230, 237);">The people behind the work</p>
+      <h2 style="font-size: 42px; font-weight: 700;">A team still learning, always building.</h2>
+      <p class="lead" style="color: rgb(168, 183, 204);">We believe emerging developers do their best work when they have room to experiment responsibly, share knowledge freely, and ship something meaningful together. Growth is part of the process, not a finish line.</p>
+     </div>
+     <div class="manifesto reveal">
+      <p>Stay curious.</p>
+      <p>Build with purpose.</p>
+      <p>Leave things better.</p>
+     </div>
+    </div>
+   </section>
+   
+   <section id="contact" class="section contact">
+    <div class="container contact-grid">
+     <div class="reveal">
+      <p class="eyebrow" style="color: rgb(114, 230, 237);">Let's make something useful</p>
+      <h2 style="font-size: 42px; font-weight: 700;">Have an idea worth exploring?</h2>
+      <p class="lead" style="color: rgb(168, 183, 204);">Tell us what you’re imagining, what challenge you’re facing, or where you’d like to begin. Every good product starts with a conversation.</p>
+     </div>
+     <div class="form-panel reveal">
+      <form id="contact-form" action="https://formspree.io/f/mnpjkdyj" method="POST">
+       <div class="form-row">
+        <div class="field">
+         <label for="contact-name">Your name</label>
+         <!-- Upgraded Name Input -->
+         <input id="contact-name" name="name" type="text" required autocomplete="name" maxlength="100" placeholder="Your name" 
+                pattern="[A-Za-z\s\-]+" 
+                title="Please enter a valid name (letters only)."
+                oninput="this.value = this.value.replace(/[^a-zA-Z\s\-]/g, '').replace(/\b\w/g, char => char.toUpperCase())">
+        </div>
+        <div class="field">
+         <label for="contact-email">Email address</label>
+         <!-- Upgraded Email Input -->
+         <input id="contact-email" name="email" type="email" required autocomplete="email" maxlength="200" placeholder="you@example.com"
+                oninput="this.value = this.value.toLowerCase()">
+        </div>
+       </div>
+       <div class="field">
+        <label for="contact-type">Project type</label>
+        <select id="contact-type" name="project_type" required>
+          <option value="" disabled selected>Choose a project type</option>
+          <option value="AI platform">AI platform</option>
+          <option value="Mobile application">Mobile application</option>
+          <option value="Desktop product">Desktop product</option>
+          <option value="Web experience">Web experience</option>
+          <option value="Something else">Something else</option>
+        </select>
+       </div>
+       <div class="field">
+        <label for="contact-message">Your idea</label>
+        <textarea id="contact-message" name="message" required minlength="10" maxlength="3000" placeholder="What would you like to build?"></textarea>
+       </div>
+       <button type="submit" class="button" style="background: rgb(114, 230, 237); color: rgb(7, 19, 33);">Let's talk</button>
+       <p class="form-note">We'll get back to you as soon as possible.</p>
+       <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+       <p id="form-success" class="form-status" hidden style="color: rgb(114, 230, 237);">Thanks! Your message has been sent successfully.</p>
+       <p id="form-error" class="form-status" hidden style="color: #ff5555;">Oops! There was a problem submitting your form. Please try again.</p>
+      </form>
+     </div>
+    </div>
+   </section>
+  </main>
+  
+  <footer class="footer">
+   <div class="container">
+    <div class="footer-grid">
+     <div>
+      <a class="brand" href="#home" style="color: #fff;">Horizon</a>
+      <p>Making ambitious technology accessible, practical, and human — one thoughtfully built product at a time.</p>
+     </div>
+     <nav class="footer-links" aria-label="Footer navigation">
+       <a href="#home">Home</a> 
+       <a href="#about">About</a> 
+       <a href="#solutions">Solutions</a> 
+       <a href="#approach">Approach</a> 
+       <a href="#contact">Contact</a>
+     </nav>
+    </div>
+    <div class="footer-bottom">
+     <span>Horizon · Keep looking forward.</span>
+    </div>
+   </div>
+  </footer>
+  
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('.nav');
+    menuButton.addEventListener('click', () => {
+      const open = nav.classList.toggle('open');
+      menuButton.setAttribute('aria-expanded', String(open));
+    });
+    nav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      nav.classList.remove('open');
+      menuButton.setAttribute('aria-expanded', 'false');
+    }));
+
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {threshold: 0.08});
+      document.querySelectorAll('.reveal').forEach(element => observer.observe(element));
+    } else {
+      document.querySelectorAll('.reveal').forEach(element => element.classList.add('visible'));
+    }
+
+    document.getElementById('contact-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      if (!form.reportValidity()) return;
+
+      const success = document.getElementById('form-success');
+      const error = document.getElementById('form-error');
+      const button = form.querySelector('button[type="submit"]');
+      
+      success.hidden = true;
+      error.hidden = true;
+      button.textContent = "Sending...";
+      button.disabled = true;
+
+      const formData = new FormData(form);
+      try {
+        const response = await fetch(form.action, {
+          method: form.method,
+          body: formData,
+          headers: {
+              'Accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          success.hidden = false;
+          form.reset();
+        } else {
+          error.hidden = false;
+        }
+      } catch (e) {
+        error.hidden = false;
+      } finally {
+        button.textContent = "Let's talk";
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
