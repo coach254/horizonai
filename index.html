@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#080e1d">
   <title>Horizon — Build beyond the expected</title>
+  <!-- Favicon for browser tab -->
+  <link rel="icon" type="image/png" href="logo.png">
+  
   <style>
     @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
     :root{--bg:#080e1d;--surface:#101a2d;--surface-2:#15213a;--text:#f5f4ef;--muted:#a8b7cc;--cyan:#72e6ed;--violet:#aa94ff;--line:rgba(185,210,238,.14)}
@@ -18,8 +21,12 @@
     .container{width:min(1180px,calc(100% - 48px));margin:auto}
     .site-header{position:sticky;top:0;z-index:20;background:rgba(8,14,29,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
     .header-inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
-    .brand{font-size:24px;font-weight:700;letter-spacing:-.06em;line-height:1}
+    
+    /* Updated Brand Style for Logo */
+    .brand{font-size:24px;font-weight:700;letter-spacing:-.06em;line-height:1;display:flex;align-items:center;gap:12px}
     .brand::after{content:".";color:var(--cyan)}
+    .brand img{height:42px;width:auto;border-radius:8px;}
+    
     .nav{display:flex;align-items:center;gap:30px}
     .nav a:not(.button){font-size:14px;color:var(--muted);transition:color .2s}
     .nav a:hover,.footer-links a:hover{color:var(--cyan)}
@@ -109,7 +116,12 @@
 <body style="background: rgb(8, 14, 29);">
   <header class="site-header">
    <div class="container header-inner">
-     <a class="brand" href="#home" style="color: rgb(245, 244, 239);">Horizon</a> 
+     <!-- Updated Header Brand with Image -->
+     <a class="brand" href="#home" style="color: rgb(245, 244, 239);">
+       <img src="logo.png" alt="Horizon AI Logo">
+       Horizon
+     </a> 
+     
      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" style="color: rgb(245, 244, 239);">Menu</button>
     <nav id="primary-nav" class="nav" aria-label="Main navigation" style="color: rgb(168, 183, 204);">
       <a href="#home">Home</a> 
@@ -281,7 +293,6 @@
        <div class="form-row">
         <div class="field">
          <label for="contact-name">Your name</label>
-         <!-- Upgraded Name Input -->
          <input id="contact-name" name="name" type="text" required autocomplete="name" maxlength="100" placeholder="Your name" 
                 pattern="[A-Za-z\s\-]+" 
                 title="Please enter a valid name (letters only)."
@@ -289,7 +300,6 @@
         </div>
         <div class="field">
          <label for="contact-email">Email address</label>
-         <!-- Upgraded Email Input -->
          <input id="contact-email" name="email" type="email" required autocomplete="email" maxlength="200" placeholder="you@example.com"
                 oninput="this.value = this.value.toLowerCase()">
         </div>
@@ -324,7 +334,11 @@
    <div class="container">
     <div class="footer-grid">
      <div>
-      <a class="brand" href="#home" style="color: #fff;">Horizon</a>
+      <!-- Updated Footer Brand with Image -->
+      <a class="brand" href="#home" style="color: #fff;">
+        <img src="logo.png" alt="Horizon AI Logo">
+        Horizon
+      </a>
       <p>Making ambitious technology accessible, practical, and human — one thoughtfully built product at a time.</p>
      </div>
      <nav class="footer-links" aria-label="Footer navigation">
